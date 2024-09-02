@@ -86,7 +86,7 @@ let currentSong = new Audio();
 //playmusic fn
 const playMusic = (track, pause = false) => {
     // var audio = new Audio("/songs/" + track);
-    currentSong.src = `/songs/${currFolder}/` + track;
+    currentSong.src = `/SHADOW-Music-Player/songs/${currFolder}/` + track;
     console.log(currentSong.src)
 
     if (!pause) {          // this condition is done for starting starting purpose so that at starting music name and 00 time displayed but no song play
