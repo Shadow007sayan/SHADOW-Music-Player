@@ -1,0 +1,379 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+:root{
+    --a:0;
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    font-family: "Roboto", sans-serif;
+}
+
+body{
+    background-color: black;
+    color: white;
+}
+
+
+.left{
+    width: 25vw;
+    padding: 10px;
+}
+
+.right{
+    width: 75vw;
+    margin: 16px 0;
+    position: relative ; 
+    /* this pos relative done for playbar */
+}
+
+/* .home{
+     padding: 20px;  // we used p-1 and added to home & library div
+} */
+.home ul li{
+    display: flex;
+    list-style: none;
+    gap: 15px;
+    width: 14px;
+    padding-top: 14px;
+    font-weight: bold;
+}
+
+.heading{
+    display: flex;
+    list-style: none;
+    gap: 15px;
+    width: 100%;
+    padding-top: 14px;
+    font-weight: bold;
+    align-items: center;
+    font-size: 14px;
+}
+.heading img{
+    width: 30px;
+}
+
+.library{
+    min-height: 82vh;
+    position: relative;
+}
+
+.footer{
+    display: flex;
+    font-size: 10px;
+    gap: 13px;
+    position: absolute;
+    bottom: 2px;
+    padding: 10px 0;
+}
+
+.footer a{
+    color: grey;
+}
+
+.header{
+    display: flex;
+    justify-content: space-between;
+    background-color: #242424;
+}
+
+.header > *{
+    padding: 20px;
+}
+
+.spotifyPlaylists{
+    padding: 16px;
+}
+
+.spotifyPlaylists h1{
+    padding: 12px;
+}
+
+.cardContainer{
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin: 30px;
+    max-height: 60vh;
+    overflow-y: auto;  
+}
+
+.spotifyPlaylists .card{
+    width: 200px;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #252525;
+    position: relative;
+    transition: all 0.5s;
+}
+
+.card > *{
+    padding-top: 10px;
+}
+
+.spotifyPlaylists .card img{
+   width: 100%;
+   object-fit:contain;
+}
+
+.spotifyPlaylists .card:hover{
+    background-color: rgb(103, 104, 104);
+    cursor: pointer;
+    --a : 1;
+}
+
+.card .play{
+    position: absolute;
+    right: 15px;
+    top: 164px;
+    opacity: var(--a);
+    transition: all 500ms ease-out;
+}
+
+
+.buttons > *{
+    margin: 0 12px;
+}
+
+.signupbtn{
+  background-color:#242424;
+  color: rgb(189, 184, 184);
+  font-weight: bold;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.signupbtn:hover{
+    font-size: 1.01rem;
+    color: white;
+    font-size: 17px;
+}
+
+.loginbtn{
+  background-color: white;
+  color: black;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 16px;
+  border-radius: 21px;
+  padding: 10px;
+  width: 79px;
+}
+
+.loginbtn:hover{
+    width: 80px;
+    font-size: 17px;
+}
+
+/* .spotifyPlaylists{
+    position: relative;
+} */
+
+.playbar{
+    /* this will be positioned according to right div which is pos relative */
+    position: fixed;
+    bottom: 30px;
+    height: 40px;
+    width: 70vw;
+    padding: 12px;
+    filter: invert(1);
+    background-color: rgb(181, 181, 181);
+    border-radius: 10px;
+}
+
+.songbuttons{
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+}
+
+.songbuttons img{
+    cursor: pointer;
+}
+
+.songList {
+    padding: 0 10px;
+    max-height: 70vh;
+    overflow-y: scroll;
+    margin-bottom: 34px ;
+}
+
+.songList info{
+    font-size: 13px;
+    width: 344px;
+}
+
+.info div{
+    word-break: break-all;
+}
+
+.songList ul li{
+    list-style-type: none;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    cursor: pointer;
+    padding: 12px 0;
+    border: 1px solid white;
+    border-radius: 5px;
+    margin: 12px 0;
+    padding: 12px;
+}
+
+.playnow{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.seekbar{
+    height: 5px;
+    width: 98%;
+    background-color: black;
+    border-radius: 10px;
+    position: absolute;
+    bottom: 0;
+    margin: 6px 0;
+    cursor: pointer;
+}
+
+.seekbar .circle{
+    width: 18px;
+    height: 19px;
+    background-color: black;
+    border-radius: 13px;
+    position: relative;
+    bottom: 9px;
+    left: 0%;
+    transition: left 0.4s;
+}
+
+.songinfo, .songtime{
+    color: black;
+    padding: 0 12px;
+}
+
+.abovebar{
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+}
+
+.songinfo {
+    max-width: 30%; /* Ensures it uses the full width available */
+    white-space: nowrap; /* Keeps the text on a single line */
+    overflow:hidden;
+    text-overflow:ellipsis;
+    position: absolute;
+    left: 0;
+}
+.songbuttons{
+    margin: auto;
+}
+.songtime{
+    position: absolute;
+    top: 7px;
+    right: 200px;
+}
+
+.hamburger{
+    display: none;
+    height: 35px;
+    width: 35px;
+    cursor: pointer;
+}
+
+.hamburgerContainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 14px;
+}
+
+.left .close{
+    position: absolute;
+    right: 35px;
+    top: 25px;
+    display: none;
+}
+
+.volrange{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    cursor: pointer;
+}
+
+ .range input{
+    height: 12px;
+    /* width: 80px; */
+    cursor: pointer;
+}
+
+@media (max-width:1200px) {
+    .left{
+        position: absolute;
+        left: -110%;
+        transition: all 0.3s;
+        z-index: 1;
+        width: 370px;
+        background-color: black;
+        overflow-x:hidden;
+        padding: 0;
+    }
+
+    .right{
+        width: 100vw;
+        margin: 0;
+    }
+
+    .playbar{
+        width: 90vw;
+        padding-left: 0;
+    }
+
+    .hamburger{
+        display: block;
+    }
+
+    .left .close{
+        display: block;
+    }
+
+    .spotifyPlaylists .card{   
+        width: 44vw;
+    }
+
+    .cardContainer{
+        margin: 0;
+        justify-content: center;
+        max-height: 70vh;
+    }
+
+    .volrange{
+       display: none;
+    }
+    .songtime{
+        right: 0;
+    }
+}
+
+@media (max-width:450px) {
+
+    .spotifyPlaylists .card{   
+        width: 80vw;
+    }
+
+    .header>*{
+        padding: 2px;
+    }
+
+    .buttons>*{
+        margin: 0 6px;
+    }
+}
