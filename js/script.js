@@ -6,11 +6,11 @@ let currFolder;
 
 async function getSongs(folder) {
     currFolder = folder;
-    let a = await fetch(`http://127.0.0.1:5500/songs/${folder}/`)
+    let a = await fetch(`http://127.0.0.1:3000/songs/${folder}/`)
     let response = await a.text(); // here without await promise pending
     let div = document.createElement("div");
     div.innerHTML = response;
-    let as = Array.from(div.getElementsByTagName("a"));
+    let as = div.getElementsByTagName("a");
     let songs = [];
 
     for (let index = 0; index < as.length; index++) {
@@ -19,7 +19,7 @@ async function getSongs(folder) {
             songs.push(element.href.split(`/songs/${folder}`)[1]);  //  songs.push(element.href.split("/songs/")[1])  to push only names ******
         }
 
-    }   
+    }
     console.log(songs);
     return songs;
 }
@@ -29,24 +29,19 @@ async function getSongs(folder) {
 
 async function getSongNameOnly(folder) {
     currFolder = folder;
-    let a = await fetch(`http://127.0.0.1:5500/songs/${folder}/`)
+    let a = await fetch(`http://127.0.0.1:3000/songs/${folder}/`)
     let response = await a.text(); // here without await promise pending
-
     let div = document.createElement("div");
     div.innerHTML = response;
-    let as = Array.from(div.getElementsByTagName("a"));
-    console.log(as)
-
+    let as = div.getElementsByTagName("td");
     allSongsName = [];
 
     for (let index = 0; index < as.length; index++) {
         const element = as[index];
-        console.log(element.href.split("/").slice(-1)[0].replace(/%20/g, ' '));
-        if (element.href.endsWith(".mp3"))
-            allSongsName.push(element.href.split("/").slice(-1)[0].replace(/%20/g, ' '));
+        if (element.textContent.endsWith(".mp3"))
+            allSongsName.push(element.textContent);
 
     }
-    console.log(allSongsName)
 
     // after getting all song show all songs in the playlist
     let songUL = document.querySelector(".songList").getElementsByTagName("ul")[0];    // selected to insert <li></li> inside this selected  ul
@@ -83,11 +78,29 @@ async function getSongNameOnly(folder) {
 
 let currentSong = new Audio();
 
+// Function to update the currently playing song's styling
+const updatePlayingSongStyle = () => {
+    // Remove 'playing' class from all songs
+    document.querySelectorAll(".songList li").forEach(songItem => {
+        songItem.classList.remove("playing");
+    });
+
+    // Add 'playing' class to the currently playing song
+    const songItems = document.querySelectorAll(".songList li");
+    
+    songItems.forEach(item => {
+        console.log(item.querySelector(".info").firstElementChild.innerHTML.trim())
+        console.log(currentSong.src.split("/").pop().replace(/%20/g, ' '))
+        if (item.querySelector(".info").firstElementChild.innerHTML.trim() === currentSong.src.split("/").pop().replace(/%20/g, ' ')) {
+            item.classList.add("playing");
+        }
+    });
+};
+
 //playmusic fn
 const playMusic = (track, pause = false) => {
     // var audio = new Audio("/songs/" + track);
-    currentSong.src = `/SHADOW-Music-Player/songs/${currFolder}/` + track;
-    console.log(currentSong.src)
+    currentSong.src = `/songs/${currFolder}/` + track;
 
     if (!pause) {          // this condition is done for starting starting purpose so that at starting music name and 00 time displayed but no song play
         currentSong.play();
@@ -98,6 +111,8 @@ const playMusic = (track, pause = false) => {
     document.querySelector(".songinfo").innerHTML = track  //  if i havenot done my own fn for getting music name only then the name might come as encode url %20 ...%20 like that then we have to use decodeURI(track) in place of track
     document.querySelector(".songtime").innerHTML = "00:00 / 00:00"
 
+    // Update the style of the currently playing song
+    updatePlayingSongStyle();
 
 }
 
@@ -110,21 +125,18 @@ function convertSecondsToMinuteSecond(seconds) {
 }
 
 async function displayAlbums() {
-    let a = await fetch(`http://127.0.0.1:5500/songs/`)
+    let a = await fetch(`http://127.0.0.1:3000/songs/`)
     let response = await a.text(); // here without await promise pending
     let div = document.createElement("div");
     div.innerHTML = response;
-    // console.log(response)
     let anchors = Array.from(div.getElementsByTagName("a"))
-    console.log(anchors)
-
     for (let index = 0; index < anchors.length; index++) {
         const e = anchors[index];
-        if (e.href.includes("/songs/")) {
-            let folder = e.href.split("/").slice(-1)[0]
+        if (e.href.includes("/songs")) {
+            let folder = e.href.split("/").slice(-2)[0]
             console.log(folder)
             //Get the metadata of the folder
-            let b = await fetch(`http://127.0.0.1:5500/songs/${folder}/info.json`)
+            let b = await fetch(`http://127.0.0.1:3000/songs/${folder}/info.json`)
             let response = await b.json();
             console.log(response)
             document.querySelector(".cardContainer").innerHTML = document.querySelector(".cardContainer").innerHTML + ` <div data-folder="${folder}" class="card">
@@ -150,7 +162,7 @@ async function displayAlbums() {
         e.addEventListener("click", async item => {
             // console.log(`${item.currentTarget.dataset.folder}`)
             await getSongNameOnly(`${item.currentTarget.dataset.folder}`)
-            
+
             // whenever a card is clicked 1st song played
             playMusic(allSongsName[0])
         })
@@ -164,7 +176,7 @@ async function main() {
     songs = await getSongs("test");
 
     await getSongNameOnly("test")
-    
+
     playMusic(allSongsName[0], true);
 
     // Display all albums on the page
@@ -254,22 +266,77 @@ async function main() {
 
 
     // Add event listener to mute the track
-    document.querySelector(".volume>img").addEventListener("click",e=>{
-        if(e.target.src.includes("assets/images/volume.svg")){
+    document.querySelector(".volume>img").addEventListener("click", e => {
+        if (e.target.src.includes("assets/images/volume.svg")) {
             // = use because strings are immutable
-            e.target.src = e.target.src.replace("assets/images/volume.svg","assets/images/mute.svg")
-            currentSong.volume=0
-            document.querySelector(".range").getElementsByTagName("input")[0].value=0;
+            e.target.src = e.target.src.replace("assets/images/volume.svg", "assets/images/mute.svg")
+            currentSong.volume = 0
+            document.querySelector(".range").getElementsByTagName("input")[0].value = 0;
         }
-        else{
-            e.target.src = e.target.src.replace("assets/images/mute.svg","assets/images/volume.svg")
-            currentSong.volume=.2
-            document.querySelector(".range").getElementsByTagName("input")[0].value=20;
+        else {
+            e.target.src = e.target.src.replace("assets/images/mute.svg", "assets/images/volume.svg")
+            currentSong.volume = .2
+            document.querySelector(".range").getElementsByTagName("input")[0].value = 20;
         }
     })
 
+    // Add event listener for play next song when ended currentSong
+    currentSong.addEventListener("ended", () => {
+        let index = allSongsName.indexOf(currentSong.src.split("/")[5].replace(/%20/g, ' '));
+        index = (index + 1) % allSongsName.length;
+        playMusic(allSongsName[index])
+    });
+
+    // Function to adjust the volume
+    const adjustVolume = (change) => {
+        currentSong.volume = Math.min(Math.max(currentSong.volume + change, 0), 1);
+        document.querySelector(".range").getElementsByTagName("input")[0].value = currentSong.volume * 100;
+    }
+
+    // Add event listener for space arrow keys for pause/play,currSong change and volume control
+
+    document.addEventListener("keydown", (event) => {
+        var idx;
+        switch (event.code) {
+            case "Space":
+                // Toggle play/pause
+                if (currentSong.paused) {
+                    currentSong.play();
+                    play.src = "assets/images/pause.svg";
+                } else {
+                    currentSong.pause();
+                    play.src = "assets/images/play.svg";
+                }
+                event.preventDefault(); // Prevent default action (e.g., scrolling the page)
+                break;
+            case "ArrowLeft":
+                // Play previous song
+                idx = allSongsName.indexOf(currentSong.src.split("/")[5].replace(/%20/g, ' '));
+                idx = (idx - 1 + allSongsName.length) % allSongsName.length;
+                playMusic(allSongsName[idx])
+                event.preventDefault();
+                break;
+            case "ArrowRight":
+                // Play next song
+                idx = allSongsName.indexOf(currentSong.src.split("/")[5].replace(/%20/g, ' '));
+                idx = (idx + 1) % allSongsName.length;
+                playMusic(allSongsName[idx])
+                event.preventDefault();
+                break;
+            case "ArrowUp":
+                // Increase volume
+                adjustVolume(0.1);
+                event.preventDefault();
+                break;
+            case "ArrowDown":
+                // Decrease volume
+                adjustVolume(-0.1);
+                event.preventDefault();
+                break;
+        }
+    });
 }
 
 main()
 
-//  replace port 5500 by 5500
+//  replace port 3000 by 3000
