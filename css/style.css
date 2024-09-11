@@ -86,7 +86,7 @@ body{
     padding: 16px;
 }
 
-.spotifyPlaylists h1{
+.shadowPlaylists h1{
     padding: 12px;
 }
 
@@ -99,7 +99,7 @@ body{
     overflow-y: auto;  
 }
 
-.spotifyPlaylists .card{
+.shadowPlaylists .card{
     width: 200px;
     padding: 10px;
     border-radius: 5px;
@@ -112,12 +112,12 @@ body{
     padding-top: 10px;
 }
 
-.spotifyPlaylists .card img{
+.shadowPlaylists .card img{
    width: 100%;
    object-fit:contain;
 }
 
-.spotifyPlaylists .card:hover{
+.shadowPlaylists .card:hover{
     background-color: rgb(103, 104, 104);
     cursor: pointer;
     --a : 1;
@@ -168,7 +168,7 @@ body{
     font-size: 17px;
 }
 
-/* .spotifyPlaylists{
+/* .shadowPlaylists{
     position: relative;
 } */
 
@@ -352,7 +352,7 @@ body{
         display: block;
     }
 
-    .spotifyPlaylists .card{   
+    .shadowPlaylists .card{   
         width: 44vw;
     }
 
@@ -372,7 +372,7 @@ body{
 
 @media (max-width:450px) {
 
-    .spotifyPlaylists .card{   
+    .shadowPlaylists .card{   
         width: 80vw;
     }
 
