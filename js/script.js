@@ -108,7 +108,7 @@ const playMusic = (track, pause = false) => {
     }
 
 
-    document.querySelector(".songinfo").innerHTML = track  //  if i havenot done my own fn for getting music name only then the name might come as encode url %20 ...%20 like that then we have to use decodeURI(track) in place of track
+    document.querySelector(".songinfo").innerHTML = track  //  if havenot done my own fn for getting music name only then the name might come as encode url %20 ...%20 like that then we have to use decodeURI(track) in place of track
     document.querySelector(".songtime").innerHTML = "00:00 / 00:00"
 
     // Update the style of the currently playing song
